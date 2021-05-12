@@ -1,3 +1,16 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/felix-workspace/backend-image', '.']
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/felix-workspace/frontend-image", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/felix-workspace/frontend-image"]
+  - name: "gcr.io/cloud-builders/kubectl"
+    args:
+      [
+        "set",
+        "image",
+        "deployment/frontend-deployment",
+        "frontend=gcr.io/felix-workspace/frontend-image",
+      ]
+    env:
+      - "CLOUDSDK_COMPUTE_ZONE=europe-west2-a"
+      - "CLOUDSDK_CONTAINER_CLUSTER=cluster-test-felix"
